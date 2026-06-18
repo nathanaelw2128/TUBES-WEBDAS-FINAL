@@ -127,6 +127,14 @@ body {
   width: 100%;
 }
 
+.navbar__links a.active {
+  color: var(--white);
+}
+
+.navbar__links a.active::after {
+  width: 100%;
+}
+
 /* Tombol hamburger — hanya muncul di layar kecil */
 .navbar__hamburger {
   display: none;
@@ -193,6 +201,10 @@ body {
 }
 
 #mobileNav a:hover {
+  color: var(--white);
+}
+
+#mobileNav a.active {
   color: var(--white);
 }
 
