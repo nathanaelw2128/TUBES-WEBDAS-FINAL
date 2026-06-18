@@ -9,6 +9,17 @@ window.addEventListener('scroll', () => {
   }
 });
 
+// Highlight link navbar sesuai halaman yang sedang aktif
+(function () {
+  const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+  document.querySelectorAll('.navbar__links a').forEach(function (a) {
+    const linkPage = a.getAttribute('href').split('/').pop();
+    if (linkPage === currentPage) {
+      a.classList.add('active');
+    }
+  });
+})();
+
 // Mobile hamburger menu
 const hamburger = document.getElementById('hamburger');
 const navLinks = document.getElementById('navLinks');
@@ -23,9 +34,18 @@ closeBtn.className = 'mobile-nav__close';
 closeBtn.setAttribute('aria-label', 'Close menu');
 closeBtn.textContent = '✕';
 
-// Salin link dari navbar ke dalam overlay
+// Salin link dari navbar ke dalam overlay (beserta class active)
 const linksList = document.createElement('ul');
 linksList.innerHTML = navLinks.innerHTML;
+
+// Terapkan class active ke link mobile juga
+const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+linksList.querySelectorAll('a').forEach(function (a) {
+  const linkPage = a.getAttribute('href').split('/').pop();
+  if (linkPage === currentPage) {
+    a.classList.add('active');
+  }
+});
 
 mobileOverlay.appendChild(closeBtn);
 mobileOverlay.appendChild(linksList);
