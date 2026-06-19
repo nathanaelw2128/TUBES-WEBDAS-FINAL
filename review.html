@@ -13,12 +13,14 @@
   <link rel="stylesheet" href="style.css" />
 
   <style>
+    /* Mengatur layout pembungkus konten utama agar berada di tengah dan rapi */
     .page-content {
       max-width: 1100px;
       margin: 0 auto;
       padding: 4rem 2rem 5rem;
       min-height: 50vh;
     }
+
 
     .review-shell {
       display: grid;
@@ -75,8 +77,9 @@
     .review-form-card p,
     .review-card li,
     .review-form-card label,
-    .review-form-card small {
-      font-family: var(--font-script);
+    .review-form-card small,
+    .review-item__text {
+      font-family: var(--font-serif);
       font-size: 1.02rem;
       line-height: 1.7;
       color: #342e27;
@@ -278,40 +281,6 @@
         grid-template-columns: 1fr;
       }
     }
-
-    @media (max-width: 600px) {
-      .page-content {
-        padding: 2.5rem 1rem 3rem;
-      }
-
-      .review-hero,
-      .review-card,
-      .review-form-card {
-        padding: 1.1rem;
-        border-radius: 16px;
-      }
-
-      .review-shell {
-        gap: 0.9rem;
-      }
-
-      .review-highlight {
-        grid-template-columns: 1fr;
-      }
-
-      .review-item__top {
-        flex-direction: column;
-        gap: 0.3rem;
-      }
-
-      .review-item__rating {
-        align-self: flex-start;
-      }
-
-      .review-button {
-        width: 100%;
-      }
-    }
   </style>
 </head>
 
@@ -399,7 +368,7 @@
           <div class="form-row">
             <div class="field">
               <label for="name">Nama</label>
-              <input id="name" type="text" placeholder="Contoh: Darren Nicholas" />
+              <input id="name" type="text" placeholder="Contoh: Gerald" />
             </div>
             <div class="field">
               <label for="email">Email</label>
@@ -565,6 +534,7 @@
 
   <script src="script.js"></script>
   <script>
+    /* Data default review */
     const defaultReviews = [
       {
         id: 1,
@@ -573,7 +543,7 @@
         visit: 'Mei 2026',
         rating: '★★★★★ Extraordinary',
         favorite: 'Basilica of St. Peter',
-        recommend: 'Yes, highly recommended',
+        recommend: 'Ya, sangat merekomendasikan',
         review: 'Suasana di Vatikan terasa sangat tenang dan monumental. Saya sangat terkesan dengan detail arsitektur dan nilai sejarah yang masih terasa hidup.'
       },
       {
@@ -583,18 +553,23 @@
         visit: 'April 2026',
         rating: '★★★★☆ Very Good',
         favorite: 'Sistine Chapel',
-        recommend: 'Yes, but needs more preparation',
+        recommend: 'Ya, tetapi perlu persiapan lebih',
         review: 'Kunjungan ini membuat saya memahami mengapa Vatikan menjadi simbol seni dan iman dunia. Persiapan tiket dan jam kunjung sangat penting.'
       }
     ];
 
+    /* Periksa data dgn kunci 'vaticanReviews', jika tidak ada pakai default di atas */
     const STORAGE_KEY = 'vaticanReviews';
     let reviews = JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultReviews;
+    // JSON parse ubah string dari Local Storage -> array objek yang bisa digunakan di JS
 
+    /* Simpan kondisi terbaru dari array reviews ke dalam Local Storage */
     function saveReviews() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(reviews));
     }
+    // JSON stringify ubah array objek -> string untuk disimpan di Local Storage
 
+    // Baca data array reviews, tampilkan dalam bentuk HTML di halaman
     function renderReviews() {
       const reviewList = document.getElementById('reviewList');
 
@@ -603,6 +578,8 @@
         return;
       }
 
+      // .map() = buat array baru dengan format HTML untuk setiap review, lalu 
+      // .join('') untuk gabungkan jadi satu string HTML utuh (tanpa koma karena bentuknya baru array)
       reviewList.innerHTML = reviews
         .map((item) => `
                     <article class="review-item">
@@ -623,6 +600,10 @@
         .join('');
     }
 
+
+    // addEventListener = submit form, ambil data form, validasi, simpan ke array reviews, update Local Storage, render ulang daftar review, dan reset for
+    // preventDefault() untuk mencegah reload halaman saat submit
+    // trim() untuk menghapus spasi kosong di awal/akhir input
     document.getElementById('reviewForm').addEventListener('submit', function (event) {
       event.preventDefault();
 
@@ -639,6 +620,8 @@
         return;
       }
 
+      // Cek akhir kelengkapan data
+      // reviews.unshift() untuk menambahkan review baru di awal array agar muncul paling atas
       reviews.unshift({
         id: Date.now(),
         name,
@@ -650,6 +633,7 @@
         review: reviewText
       });
 
+      // this.reset() untuk reset form setelah submit berhasil (kosongin input form)
       saveReviews();
       renderReviews();
       this.reset();
